@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pausa da leitura</title>
+    <style>
+        /* Reset e Estilos Gerais */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            overflow: hidden;
+            position: relative;
+            touch-action: manipulation;
+        }
+
+        /* Tela Inicial */
+        #home-screen {
+            text-align: center;
+            z-index: 10;
+        }
+
+        .heart {
+            font-size: 100px;
+            color: #ff4d6d;
+            margin-bottom: 30px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .btn {
+            padding: 15px 30px;
+            margin: 15px;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            min-width: 150px;
+        }
+
+        #main-btn {
+            background: #ff4d6d;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #runaway-btn {
+            background: #ffddd2;
+            color: #ff4d6d;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Telas de Galeria */
+        .gallery-screen {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 20px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 20;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .photo-container {
+            width: 80%;
+            max-width: 300px;
+            height: 300px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px auto;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .photo-slide {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .photo-slide.active {
+            opacity: 1;
+        }
+
+        .message {
+            max-width: 90%;
+            margin: 20px auto;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-btn {
+            margin: 10px;
+            padding: 12px 25px;
+            background: #ff4d6d;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .home-btn {
+            background: #ffddd2;
+            color: #ff4d6d;
+            margin-top: 20px;
+        }
+
+        /* Controles do Carrossel */
+        .carousel-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .carousel-controls button {
+            background: #ff4d6d;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+        }
+
+        /* Flores Animadas */
+        .flower {
+            position: absolute;
+            opacity: 0.6;
+            animation: float 15s infinite linear;
+            z-index: 1;
+            user-select: none;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-100vh) rotate(360deg); }
+        }
+
+        /* Responsividade */
+        @media (max-width: 600px) {
+            .heart { font-size: 80px; }
+            .btn { 
+                padding: 12px 25px;
+                font-size: 16px;
+                min-width: 120px;
+            }
+            .photo-container {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Tela Inicial -->
+    <div id="home-screen">
+        <div class="heart">❤️</div>
+        <button id="main-btn" class="btn">Abre o presente ai dona raissa</button>
+        <button id="runaway-btn" class="btn">Não quero presente não✌</button>
+        
+        <!-- Controle de Áudio (Oculto) -->
+        <audio id="bg-music" loop>
+            <source src="" type="audio/mp3"> <!-- Adicione seu MP3 aqui -->
+        </audio>
+    </div>
+
+    <!-- Telas de Galeria -->
+    <div id="gallery1" class="gallery-screen">
+        <div class="photo-container">
+            <!-- Substitua pelas URLs das suas fotos -->
+            <img class="photo-slide active" src="imagens/imagem1.jpg" alt="Foto 1">
+            <img class="photo-slide" src="imagens/imagem2.jpg" alt="Foto 2">
+            <img class="photo-slide" src="imagens/imagem3.jpg" alt="Foto 3">
+            <img class="photo-slide" src="imagens/imagem4.jpg" alt="Foto 4">
+            <img class="photo-slide" src="imagens/imagem5.jpg" alt="Foto 5">
+        </div>
+        
+        <div class="message">
+            <p>a parceira de todas as sinucas</p>
+        </div>
+        
+        <div class="carousel-controls">
+            <button onclick="prevPhoto()">◀</button>
+            <button onclick="nextPhoto()">▶</button>
+        </div>
+        
+        <button class="nav-btn" onclick="nextGallery(1)">Próxima Página</button>
+        <button class="nav-btn home-btn" onclick="backToHome()">Voltar ao Início</button>
+    </div>
+
+    <div id="gallery2" class="gallery-screen">
+        <div class="photo-container">
+            <img class="photo-placeholder" src="imagens/imagem6.jpg" alt="Foto Extra">
+        </div>
+        <div class="message">
+            <p>Ja pode voltar a ler dona raissa</p>
+        </div>
+        <button class="nav-btn" onclick="nextGallery(2)">Voltar</button>
+        <button class="nav-btn home-btn" onclick="backToHome()">Voltar ao Início</button>
+    </div>
+
+    <!-- Flores Animadas -->
+    <div id="flowers-container"></div>
+
+    <script>
+        // Botão Fugitivo (mobile e desktop)
+        const runawayBtn = document.getElementById('runaway-btn');
+        
+        function moveButton() {
+            const maxX = window.innerWidth - runawayBtn.offsetWidth;
+            const maxY = window.innerHeight - runawayBtn.offsetHeight;
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+            
+            runawayBtn.style.position = 'absolute';
+            runawayBtn.style.left = `${Math.max(0, randomX)}px`;
+            runawayBtn.style.top = `${Math.max(0, randomY)}px`;
+        }
+
+        runawayBtn.addEventListener('mouseover', moveButton);
+        runawayBtn.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            moveButton();
+        });
+
+        // Navegação
+        document.getElementById('main-btn').addEventListener('click', () => {
+            document.getElementById('home-screen').style.display = 'none';
+            document.getElementById('gallery1').style.display = 'flex';
+            // Inicia música (opcional)
+            // document.getElementById('bg-music').play();
+        });
+
+        function nextGallery(current) {
+            document.getElementById(`gallery${current}`).style.display = 'none';
+            if (current === 1) {
+                document.getElementById('gallery2').style.display = 'flex';
+            } else {
+                document.getElementById('gallery1').style.display = 'flex';
+            }
+        }
+
+        function backToHome() {
+            document.querySelectorAll('.gallery-screen').forEach(screen => {
+                screen.style.display = 'none';
+            });
+            document.getElementById('home-screen').style.display = 'block';
+        }
+
+        // Carrossel de Fotos
+        let currentPhotoIndex = 0;
+        const photos = document.querySelectorAll('.photo-slide');
+        const totalPhotos = photos.length;
+
+        function showPhoto(index) {
+            photos.forEach(photo => photo.classList.remove('active'));
+            photos[index].classList.add('active');
+        }
+
+        function nextPhoto() {
+            currentPhotoIndex = (currentPhotoIndex + 1) % totalPhotos;
+            showPhoto(currentPhotoIndex);
+        }
+
+        function prevPhoto() {
+            currentPhotoIndex = (currentPhotoIndex - 1 + totalPhotos) % totalPhotos;
+            showPhoto(currentPhotoIndex);
+        }
+
+        // Transição automática (3 segundos)
+        setInterval(nextPhoto, 3000);
+
+        // Flores Animadas (Personalizável)
+        const flowerConfig = {
+            types: ['🌸', '🌹', '🌺', '🌻', '🌼', '🌷','⛅','☀','🏖','🌅'], // Tipos de flores
+            total: 20, // Quantidade
+            minSize: 15, // Tamanho mínimo (px)
+            maxSize: 30, // Tamanho máximo (px)
+            animationDuration: { min: 10, max: 25 } // Velocidade (s)
+        };
+
+        function createFlowers() {
+            const container = document.getElementById('flowers-container');
+            
+            for (let i = 0; i < flowerConfig.total; i++) {
+                const flower = document.createElement('div');
+                flower.className = 'flower';
+                flower.innerHTML = flowerConfig.types[Math.floor(Math.random() * flowerConfig.types.length)];
+                flower.style.left = `${Math.random() * 100}vw`;
+                flower.style.top = `${Math.random() * 100}vh`;
+                flower.style.fontSize = `${Math.random() * (flowerConfig.maxSize - flowerConfig.minSize) + flowerConfig.minSize}px`;
+                flower.style.animationDuration = `${Math.random() * (flowerConfig.animationDuration.max - flowerConfig.animationDuration.min) + flowerConfig.animationDuration.min}s`;
+                container.appendChild(flower);
+            }
+        }
+
+        window.onload = createFlowers;
+    </script>
+</body>
+</html>
